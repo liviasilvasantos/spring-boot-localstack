@@ -13,8 +13,15 @@ docker compose up
 aws configure --profile localstack
 ```
 
-## Add value to parameter store
+## Adicionar no parameter store
+
 ```bash
 cd localstack
 ./localstack.sh
+```
+
+## Consultar no parameter store
+
+```bash
+aws --endpoint http://localhost:4566 ssm get-parameter --name "/config/spring-boot-localstack_localstack/helloWorld" --profile localstack
 ```
