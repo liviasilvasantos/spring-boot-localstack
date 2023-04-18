@@ -12,12 +12,11 @@ aws:
   secretsmanager:
     enabled: true
     endpoint: http://localhost:4566
-
-#cloud:
-#  aws:
-#    s3:
-#      endpoint: http://s3.localhost.localstack.cloud:4566/
-#    sqs:
-#      endpoint: http://localhost:4566
-#    sns:
-#      endpoint: http://localhost:4566
+  cloud:
+    aws:
+      s3:
+        endpoint: http://s3.localhost.localstack.cloud:4566/ #dns localstack: s3.<host>.<profile>.cloud:<port>
+#      sqs:
+#        endpoint: http://localhost:4566
+#      sns:
+#        endpoint: http://localhost:4566
