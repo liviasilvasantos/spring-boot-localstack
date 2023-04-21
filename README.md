@@ -25,3 +25,7 @@ cd localstack
 ```bash
 aws --endpoint http://localhost:4566 ssm get-parameter --name "/config/spring-boot-localstack_localstack/helloWorld" --profile localstack
 ```
+
+## Swagger
+
+> http://localhost:8080/swagger-ui/index.html
