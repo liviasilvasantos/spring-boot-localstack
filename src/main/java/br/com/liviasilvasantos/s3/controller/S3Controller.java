@@ -1,6 +1,6 @@
 package br.com.liviasilvasantos.s3.controller;
 
-import br.com.liviasilvasantos.s3.controller.domain.response.S3FileResponse;
+import br.com.liviasilvasantos.s3.controller.domain.response.S3FileOutput;
 import br.com.liviasilvasantos.s3.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,44 +27,8 @@ public class S3Controller {
 
     private final S3FileService fileService;
 
-    @GetMapping("/s3/files/{file}")
-    public ResponseEntity<String> isFileExists(@PathVariable("file") String file) {
-        try{
-            if (fileService.isFileExists(file)) {
-                return ResponseEntity.ok("File %s existis in bucket".formatted(file));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch(final Exception exception) {
-            log.error(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    @GetMapping("/s3/files")
-    public ResponseEntity<List<S3FileResponse>> listFiles(@RequestParam("fileName") String fileName) {
-        List<S3FileResponse> s3Files = new ArrayList<>();
-        try {
-            List<Resource> resources = fileService.searchFile(fileName, false);
-
-            if (resources.isEmpty()) {
-                s3Files.add(S3FileResponse.of(FILE_NOT_EXISTS, null));
-                return new ResponseEntity<>(s3Files, HttpStatus.NOT_FOUND);
-            }
-
-            for (Resource resource : resources)
-                s3Files.add(S3FileResponse.of(resource.getFilename(), null));
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(s3Files, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return ResponseEntity.ok(s3Files);
-    }
-
-
     @PostMapping("/s3/files")
-    public ResponseEntity<S3FileResponse> createFile() {
+    public ResponseEntity<S3FileOutput> createFile() {
         Path tempFile;
         try {
             tempFile = Files.createTempFile("prefixo-", ".txt");
@@ -74,9 +38,41 @@ public class S3Controller {
             fileService.saveFile(Files.newInputStream(tempFile), tempFile.toFile().getName());
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(S3FileResponse.of(ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(S3FileOutput.of(ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseEntity.ok(S3FileResponse.of(tempFile.toFile().getName(), null));
+        return ResponseEntity.ok(S3FileOutput.of(tempFile.toFile().getName(), null));
+    }
+
+    @GetMapping("/s3/files")
+    public ResponseEntity<List<S3FileOutput>> listFiles(@RequestParam("fileName") String fileName) {
+        List<S3FileOutput> s3Files = new ArrayList<>();
+        try {
+            List<Resource> resources = fileService.searchFile(fileName, false);
+
+            if (resources.isEmpty()) {
+                s3Files.add(S3FileOutput.of(FILE_NOT_EXISTS, null));
+                return new ResponseEntity<>(s3Files, HttpStatus.NOT_FOUND);
+            }
+
+            for (Resource resource : resources)
+                s3Files.add(S3FileOutput.of(resource.getFilename(), null));
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(s3Files, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseEntity.ok(s3Files);
+    }
+
+    @GetMapping("/s3/files/{file}")
+    public ResponseEntity<S3FileOutput> contentFile(@PathVariable("file") String file) {
+        if (fileService.isFileExists(file)) {
+            List<Resource> resources = fileService.searchFile(file, true);
+            Resource resource = resources.get(0);
+            return ResponseEntity.ok(S3FileOutput.of(resource.getFilename(), fileService.contentFile(resource.getFilename())));
+        } else {
+            return new ResponseEntity<>(S3FileOutput.of(FILE_NOT_EXISTS, null), HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -12,11 +12,20 @@ aws:
   secretsmanager:
     enabled: true
     endpoint: http://localhost:4566
-  cloud:
-    aws:
-      s3:
-        endpoint: http://s3.localhost.localstack.cloud:4566/ #dns localstack: s3.<host>.<profile>.cloud:<port>
-#      sqs:
-#        endpoint: http://localhost:4566
-#      sns:
-#        endpoint: http://localhost:4566
+
+cloud:
+  aws:
+    region:
+      static: us-east-1
+    credentials:
+      accessKey: localAccessKey
+      secretKey: localSecretAccessKey
+    s3:
+      endpoint: http://s3.localhost.localstack.cloud:4566/
+
+#aws-config:
+#    region: us-east-1
+#    access-key: localAccessKey
+#    secret-access-key: localSecretAccessKey
+#    s3-url: http://s3.localhost.localstack.cloud:4566
+#    s3-bucket-name: helloworld

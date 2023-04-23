@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class S3FileResponse {
+public class S3FileOutput {
     private String fileName;
     private String content;
 
-    public static S3FileResponse of(final String fileName, final String content) {
-        return S3FileResponse.builder().fileName(fileName).content(content).build();
+    public static S3FileOutput of(final String fileName, final String content) {
+        return S3FileOutput.builder().fileName(fileName).content(content).build();
     }
 }
