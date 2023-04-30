@@ -1,6 +1,5 @@
 package br.com.liviasilvasantos.s3.service;
 
-import br.com.liviasilvasantos.s3.configuration.AwsConfigProperties;
 import br.com.liviasilvasantos.exception.FileListenerException;
 import com.amazonaws.services.s3.AmazonS3;
 import io.awspring.cloud.core.io.s3.PathMatchingSimpleStorageResourcePatternResolver;
@@ -14,19 +13,23 @@ import org.springframework.core.io.WritableResource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 public class S3FileService {
 
-    @Value("helloworld")
+    @Value("${s3Bucket}")
     private String directory;
+
     @Autowired
     private ResourceLoader resourceLoader;
 
@@ -85,4 +88,5 @@ public class S3FileService {
             return null;
         }
     }
+
 }

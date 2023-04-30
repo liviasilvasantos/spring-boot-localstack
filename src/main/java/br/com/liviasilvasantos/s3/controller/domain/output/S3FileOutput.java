@@ -1,4 +1,4 @@
-package br.com.liviasilvasantos.s3.controller.domain.response;
+package br.com.liviasilvasantos.s3.controller.domain.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

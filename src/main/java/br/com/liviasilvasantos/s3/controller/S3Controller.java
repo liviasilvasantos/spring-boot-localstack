@@ -1,6 +1,6 @@
 package br.com.liviasilvasantos.s3.controller;
 
-import br.com.liviasilvasantos.s3.controller.domain.response.S3FileOutput;
+import br.com.liviasilvasantos.s3.controller.domain.output.S3FileOutput;
 import br.com.liviasilvasantos.s3.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
