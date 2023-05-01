@@ -29,6 +29,6 @@ aws:
 cloud:
   aws:
     s3:
-      endpoint: http://s3.localhost.localstack.cloud:4566/
+      endpoint: http://s3.us-east-1.localhost.localstack.cloud:4566/
 
 s3Bucket: helloworld
